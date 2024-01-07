@@ -1,0 +1,64 @@
+﻿<Window x:Class="Social_Media.AddPost"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Social_Media"
+        mc:Ignorable="d"
+        Title="AddPost" Height="450" Width="800" MinHeight="550" MinWidth="800" MaxHeight="550" MaxWidth="800">
+    <Grid Background="#FF363636">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50"></ColumnDefinition>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="50"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"></RowDefinition>
+            <RowDefinition Height="230"></RowDefinition>
+            <RowDefinition Height="150"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" VerticalAlignment="Center">
+            <TextBox Text="ADD POST" FontSize="40" Background="#FF363636" Foreground="White" BorderBrush="{x:Null}"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="1">
+            <TextBlock x:Name="TBLTitle" Text="Title:" FontSize="20" Height="30" Margin="0 25 0 0" Foreground="White"></TextBlock>
+            <TextBlock x:Name="TBLContent" Text="Content:" FontSize="20" Height="30" Margin="0 5 0 0" Foreground="White"></TextBlock>
+            <TextBlock x:Name="TBLFile" Text="Add File:" FontSize="20" Height="30" Margin="0 35 0 0" Foreground="White"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Column="2" Grid.Row="1">
+            <TextBox x:Name="TBTitle" FontSize="20" Text="" Height="30" Margin="0 25 0 0" BorderBrush="White" Background="#FF363636" Foreground="White"></TextBox>
+            <TextBox x:Name="TBContent" FontSize="20" Text="" Height="60" Margin="0 5 0 0" TextWrapping="WrapWithOverflow" Background="#FF363636" BorderBrush="White" Foreground="White"></TextBox>
+            <DockPanel HorizontalAlignment="Left" Margin="0 5 0 0" Height="60">
+                <Image x:Name="PostImg" Width="60" Height="60" MouseLeftButtonDown="PostImg_MouseLeftButtonDown" Source="/AddIcon.png"/>
+                <TextBlock x:Name="TBFileName" VerticalAlignment="Bottom" Text="" FontSize="12" Margin="20 0 0 10" Foreground="White" TextWrapping="WrapWithOverflow"></TextBlock>
+            </DockPanel>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="2">
+            <TextBlock x:Name="TBLFriends" Text="Friends:" FontSize="20" Height="30" Margin="0 5 0 0" Foreground="White"></TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Column="2" Grid.Row="2">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ListBox x:Name="LVFriends" ItemsSource="{Binding Friends}" SelectionMode="Multiple" Background="#FF363636" BorderBrush="White" Foreground="White" MaxHeight="150">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Name="Name" FontSize="12">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} {1}">
+                                            <Binding Path="Name" />
+                                            <Binding Path="Surname" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </StackPanel>
+        <Button Grid.Column="2" Grid.Row="3" Content="ADD" Width="40" Height="40" HorizontalAlignment="Right" VerticalAlignment="Center" BorderBrush="White" Background="#FF363636" Foreground="White" Click="Button_Click"></Button>
+        
+    </Grid>
+</Window>

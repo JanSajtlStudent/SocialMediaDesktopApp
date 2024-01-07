@@ -1,0 +1,198 @@
+﻿<Window x:Class="Social_Media.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Social_Media"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80px"></ColumnDefinition>
+            <ColumnDefinition MinWidth="100px"></ColumnDefinition>
+            <ColumnDefinition MinWidth="50px" Width="350"></ColumnDefinition>
+            <ColumnDefinition MinWidth="50px"></ColumnDefinition>
+            <ColumnDefinition Width="80px"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label FontSize="25" Grid.Row="0" Grid.Column="1" Foreground="#FF729CF9">LinkedIn</Label>
+        <Menu Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Right" Background="White">
+            <MenuItem Header="Datoteka" Height="50" Foreground="#FF729CF9" Background="{x:Null}" BorderBrush="{x:Null}">
+                <MenuItem Header="Prijatelji"></MenuItem>
+                <MenuItem Name="MIIzhod" Click="MIIzhod_Click" Header="Izhod"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Objave" Height="50" Foreground="#FF729CF9" Background="{x:Null}" BorderBrush="{x:Null}">
+                <MenuItem Header="Dodaj" Command="{Binding AddPostCommand}"></MenuItem>
+                <MenuItem x:Name="MIOdtrani" Header="Odstrani" Command="{Binding RemovePostCommand}"></MenuItem>
+                <MenuItem x:Name="MIUredi" Header="Uredi" Command="{Binding EditPostCommand}"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <Image Grid.Column="3" HorizontalAlignment="Right" Height="40" Grid.Row="0" VerticalAlignment="Center" Width="40" Source="/profile_picture.png"></Image>
+        <StackPanel x:Name="stackPanel" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Grid.RowSpan="3" Background="#FF363636">
+            <TabControl Height="{Binding ActualHeight, ElementName=stackPanel, Mode=OneWay}" Background="#FF363636">
+                <TabItem Header="Zid">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <ListView MinHeight="200" x:Name="LVPosts" Grid.Column="1" ItemsSource="{Binding Posts}" MouseDoubleClick="ListView_DoubleClick" SelectionChanged="LVPosts_OnSelectionChanged" Background="#FF363636" BorderBrush="{x:Null}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel MinWidth="100" Width="400" HorizontalAlignment="Center" Margin="5">
+                                        <TextBlock Name="Title" Width="400" Text="{Binding Title}" FontSize="18" FontWeight="Bold" Foreground="White"></TextBlock>
+                                        <TextBlock Width="400" Text="{Binding Date}" TextWrapping="WrapWithOverflow" Foreground="White" FontStyle="Italic" ></TextBlock>
+                                        <TextBlock x:Name="TBFriendsLV" Width="400" Text="{Binding FriendsToString}" TextWrapping="WrapWithOverflow" Foreground="#FF009AFF"></TextBlock>
+                                        <TextBlock Width="400" Height="50" Text="{Binding Content}" TextWrapping="WrapWithOverflow" Foreground="White"></TextBlock>
+                                        <Image Height="200" Source="{Binding Url}" Margin="10 10 10 10"></Image>
+                                        
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Friends.Count}" Value="0">
+                                                        <Setter Property="Background" Value="Red"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Friends.Count}" Value="{x:Null}">
+                                                        <Setter Property="Background" Value="Red"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <StackPanel Grid.Column="0" Name="SPCurrentPost">
+                            <Label DockPanel.Dock="Top" Content="{Binding SelectedPost.Title}" FontSize="18" HorizontalAlignment="Center" Foreground="White"></Label>
+                            <DockPanel Margin="0 0 0 20">
+                                <Label Content="Date:" Width="60" VerticalAlignment="Center" Foreground="White"></Label>
+                                <Label Name="LabelTitle" Content="{Binding SelectedPost.Date}" Foreground="White"></Label>
+                            </DockPanel>
+                            <DockPanel Margin="0 0 0 20">
+                                <Label Content="Content:" Width="60" VerticalAlignment="Top" Background="{x:Null}" Foreground="White"></Label>
+                                <TextBox Name="TBContent" Height="100" Text="{Binding SelectedPost.Content}" Margin="0 0 20 0" TextWrapping="WrapWithOverflow" BorderBrush="White" Background="{x:Null}" Foreground="White"></TextBox>
+                            </DockPanel>
+                            <DockPanel HorizontalAlignment="Right" Margin="0 0 20 0">
+                                <Button Command="{Binding AddPostCommand}" Width="30" Height="30" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White">
+                                    <Image Width="25" Height="25" Source="/AddIcon.png" Stretch="Fill"></Image>
+                                </Button>
+                                <Button  Command="{Binding EditPostCommand}" Width="30" Height="30" FontSize="16" HorizontalAlignment="Left" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White">
+                                    <Image Width="25" Height="25" Source="/EditIcon.png"></Image>
+                                </Button>
+                                <Button  Command="{Binding RemovePostCommand}" Width="30" Height="30" FontSize="16" HorizontalAlignment="Left" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White">
+                                    <Image Width="25" Height="25" Source="/RemoveIcon.png"></Image>
+                                </Button>
+                            </DockPanel>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="O meni">
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100px"></ColumnDefinition>
+                            <ColumnDefinition MinWidth="50px" ></ColumnDefinition>
+                            <ColumnDefinition MinWidth="50px" Width="350"></ColumnDefinition>
+                            <ColumnDefinition MinWidth="50px"></ColumnDefinition>
+                            <ColumnDefinition Width="80px"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="100"></RowDefinition>
+                            <RowDefinition Height="80"></RowDefinition>
+                            <RowDefinition Height="80"></RowDefinition>
+                            <RowDefinition Height="80"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Rectangle Grid.Column="0" Grid.ColumnSpan="5" Fill="Gray"></Rectangle>
+                        <Image Grid.Column="0" HorizontalAlignment="Center" Height="80" Grid.Row="0" VerticalAlignment="Center" Width="80" Source="/profile_picture.png"></Image>
+                        <Canvas Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Left">
+                            <Label Content="Name:" Width="60" Canvas.Left="10" Canvas.Top="4"></Label>
+                            <TextBox x:Name="TBUserName" Width="200" Canvas.Left="100" Canvas.Top="8"></TextBox>
+                            <Label Content="Surname:" Width="60" Canvas.Left="10" Canvas.Top="35"></Label>
+                            <TextBox x:Name="TBUserSurname" Width="200" Canvas.Left="100" Canvas.Top="39"></TextBox>
+                            <Label Content="Desc:" Width="60" Canvas.Left="10" Canvas.Top="66"></Label>
+                            <TextBox x:Name="TBUserDesc" Width="200" Canvas.Left="100" Canvas.Top="70"></TextBox>
+                            <Label Content="School:" Width="60" Canvas.Left="10" Canvas.Top="97"></Label>
+                            <TextBox x:Name="TBUserSchool" Width="200" Canvas.Left="100" Canvas.Top="101"></TextBox>
+                            <Label Content="Location:" Width="60" Canvas.Left="10" Canvas.Top="124"></Label>
+                            <TextBox x:Name="TBUserLocation" Width="200" Canvas.Left="100" Canvas.Top="128"></TextBox>
+
+                        </Canvas>
+                        <Button Grid.Column="3" Grid.Row="3" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Width="50" Height="15" Click="UserButton_Click">
+                            <Canvas Width="40" Height="10">
+                                <Image Source="/add_icon.png" Width="15" Height="14" Canvas.Left="26" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="-2"></Image>
+                                <Label Content="Add" Canvas.Left="-5" Canvas.Top="-9"></Label>
+                            </Canvas>
+                        </Button>
+
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Prijatelji">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <ListView Grid.Column="1" MinHeight="200" x:Name="LVFriends" ItemsSource="{Binding Friends}" SelectedIndex="{Binding SelectedFriendIndex}" SelectionChanged="LVFriends_SelectionChanged" Foreground="White" BorderBrush="#FF363636" Background="#FF363636">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel MinWidth="100" Width="400" HorizontalAlignment="Center">
+                                        <TextBlock Name="Name"  Width="400" FontSize="18" FontWeight="Bold">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} {1}">
+                                                    <Binding Path="Name" />
+                                                    <Binding Path="Surname" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock Width="400" Height="50" Text="{Binding Age}" TextWrapping="WrapWithOverflow"></TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <StackPanel Grid.Column="0" Name="SPCurrentFriend" Margin="0 20 0 0">
+                            <DockPanel Margin="0 0 0 20">
+                                <Label Content="Name:" Width="60" VerticalAlignment="Center" Foreground="White"></Label>
+                                <TextBox Name="TBFriendName" Text="{Binding SelectedFriend.Name}" Margin="0 0 20 0" BorderBrush="White" Background="#FF363636" Foreground="White"></TextBox>
+                            </DockPanel>
+                            <DockPanel Margin="0 0 0 20">
+                                <Label Content="Surname:" Width="60" VerticalAlignment="Center" Foreground="White"></Label>
+                                <TextBox Name="TBFriendSurname" Text="{Binding SelectedFriend.Surname}" Margin="0 0 20 0" BorderBrush="White" Foreground="White" Background="#FF363636"></TextBox>
+                            </DockPanel>
+                            <DockPanel Margin="0 0 0 20">
+                                <Label Content="Age:" Width="60" VerticalAlignment="Center" Foreground="White"></Label>
+                                <TextBox Name="TBFriendAge" Text="{Binding SelectedFriend.Age}" Margin="0 0 20 0" Foreground="White" Background="#FF363636" BorderBrush="White"></TextBox>
+                            </DockPanel>
+                            <DockPanel HorizontalAlignment="Right" Margin="0 0 20 0">
+                                <Button Command="{Binding AddFriendCommand}" Width="30" Height="30" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White">
+                                    <Image Width="25" Height="25" Source="/AddIcon.png" Stretch="Fill"></Image>
+                                </Button>
+                                <Button  Command="{Binding EditFriendCommand}" Width="30" Height="30" FontSize="16" HorizontalAlignment="Left" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White">
+                                    <Image Width="25" Height="25" Source="/EditIcon.png"></Image>
+                                </Button>
+                                <Button  Command="{Binding RemoveFriendCommand}" Width="30" Height="30" FontSize="16" HorizontalAlignment="Left" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="White">
+                                    <Image Width="25" Height="25" Source="/RemoveIcon.png"></Image>
+                                </Button>
+                            </DockPanel>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Slike" >
+                    <ListView Height="500" MinHeight="200" x:Name="LVImages" ItemsSource="{Binding Posts}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel MinWidth="100" Width="400" HorizontalAlignment="Center">
+                                    <Image Height="200" Source="{Binding Url}" Margin="10 10 10 10"></Image>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </TabItem>
+            </TabControl>
+        </StackPanel>
+    </Grid>
+</Window>
